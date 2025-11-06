@@ -1,0 +1,5 @@
+{
+    "scripts": {
+        "build": "bun build src/index.ts --outfile dist/index.js"
+    }
+}
