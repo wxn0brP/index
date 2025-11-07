@@ -1,6 +1,6 @@
 import { fetchRepos } from "./api";
 import { categorizeOthers, groupReposByPrefix } from "./category";
-import { Config, RepoData } from "./types";
+import { Config, Data, RepoData } from "./types";
 
 const config = await fetch("config.json").then(r => r.json()) as Config;
 const repos = await fetchRepos("wxn0brP");
@@ -49,7 +49,7 @@ if (config.move) {
     }
 }
 
-export const all: [string, RepoData[]][] = [];
+export const all: Data[] = [];
 for (const category of config.order) {
     if (allMap.has(category)) {
         all.push([category, allMap.get(category)!]);

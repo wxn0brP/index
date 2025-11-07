@@ -1,6 +1,6 @@
 import { all } from "./data";
 import { renderProjects } from "./render";
-import { RepoData } from "./types";
+import { Data, RepoData } from "./types";
 
 declare const Fuse: any;
 
@@ -22,7 +22,7 @@ searchInput.addEventListener("input", () => {
         return;
     }
 
-    const results = fuse.search(query);
+    const results = fuse.search(query) as { item: RepoData }[];
     const filteredRepos = results.map(result => result.item);
 
     const filteredData = all
@@ -30,7 +30,7 @@ searchInput.addEventListener("input", () => {
             const categoryRepos = repos.filter(repo => filteredRepos.includes(repo));
             return [category, categoryRepos];
         })
-        .filter(([, repos]) => repos.length > 0) as any as [string, RepoData[]][];
+        .filter(([, repos]) => repos.length > 0) as any as Data[];
 
     renderProjects(filteredData);
 });

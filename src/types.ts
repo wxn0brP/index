@@ -18,3 +18,5 @@ export interface CategorizedRepos {
     categorized: Map<string, RepoData[]>;
     uncategorized: RepoData[];
 }
+
+export type Data = [string, RepoData[]];

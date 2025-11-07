@@ -1,4 +1,4 @@
-import { RepoData } from "./types";
+import { Data } from "./types";
 
 const main = document.querySelector("main")!;
 
@@ -12,10 +12,10 @@ const langMap: Record<string, string> = {
 
 const link = (name: string) => `https://cdn.jsdelivr.net/gh/devicons/devicon/icons/${name}/${name}-original.svg`;
 
-export function renderProjects(data: [string, RepoData[]][]) {
+export function renderProjects(data: Data[]) {
     let html = ``;
     for (const obj of data) {
-        const [category, repos] = obj as [string, RepoData[]];
+        const [category, repos] = obj as Data;
         if (repos.length > 0) {
             html += `<h2>${category}</h2>`;
             html += `<ul>`;
