@@ -44,7 +44,7 @@ if (config.move) {
         if (repoToMove) {
             if (!allMap.has(newCategory))
                 allMap.set(newCategory, []);
-            allMap.get(newCategory)!.push(repoToMove);
+            allMap.get(newCategory)!.unshift(repoToMove);
         }
     }
 }
