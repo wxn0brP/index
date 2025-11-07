@@ -2,6 +2,7 @@ export interface Config {
     prefixRules: Record<string, string[]>;
     order: string[];
     alias: Record<string, string>;
+    move?: Record<string, string>;
 }
 
 export interface RepoData {

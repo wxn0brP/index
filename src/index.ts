@@ -24,6 +24,32 @@ for (const alias of Object.entries(config.alias)) {
     allMap.delete(alias[0]);
 }
 
+if (config.move) {
+    for (const [projectName, newCategory] of Object.entries(config.move)) {
+        let repoToMove: RepoData | undefined;
+        let oldCategory: string | undefined;
+
+        for (const [category, repos] of allMap.entries()) {
+            const repoIndex = repos.findIndex(repo => repo.name === projectName);
+            if (repoIndex !== -1) {
+                repoToMove = repos[repoIndex];
+                oldCategory = category;
+                repos.splice(repoIndex, 1);
+                if (repos.length === 0) {
+                    allMap.delete(category);
+                }
+                break;
+            }
+        }
+
+        if (repoToMove) {
+            if (!allMap.has(newCategory))
+                allMap.set(newCategory, []);
+            allMap.get(newCategory)!.push(repoToMove);
+        }
+    }
+}
+
 const all = [];
 for (const category of config.order) {
     if (allMap.has(category)) {

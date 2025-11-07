@@ -51,5 +51,8 @@
     "alias": {
         "sol": "Sol Mail",
         "fc": "Fusion Chat"
+    },
+    "move": {
+        "fusion-chat": "Fusion Chat"
     }
 }
