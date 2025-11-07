@@ -23,18 +23,44 @@
             padding: 20px;
         }
 
-        a,
-        a:visited {
+        a {
             color: #fff;
         }
 
         ul {
             padding-left: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        li:hover a,
+        li:hover {
+            color: #b811b8;
+        }
+
+        header {
+            text-align: center;
+            position: sticky;
+            top: 1px;
+        }
+
+        #search-input {
+            width: 100%;
+            max-width: 600px;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: rgba(51, 51, 51, 0.5);
+            backdrop-filter: blur(10px);
+            color: #fff;
+            font-size: 16px;
         }
     </style>
 </head>
 
 <body>
+    <header>
+        <input type="text" id="search-input" placeholder="Search projects...">
+    </header>
     <main></main>
     <script type="module" src="dist/index.js"></script>
 </body>
