@@ -1,11 +1,11 @@
 import { RepoData } from "./types";
 
 export async function fetchRepos(owner: string): Promise<RepoData[]> {
-    const cache = localStorage.getItem('repos');
+    const cache = localStorage.getItem("repos");
     const ttl = 10 * 60 * 1000;
     if (cache) {
         if (Date.now() - JSON.parse(cache).timestamp > ttl) {
-            localStorage.removeItem('repos');
+            localStorage.removeItem("repos");
         } else {
             return JSON.parse(cache).repos;
         }
@@ -21,6 +21,6 @@ export async function fetchRepos(owner: string): Promise<RepoData[]> {
         language: r.language,
     }));
 
-    localStorage.setItem('repos', JSON.stringify({ timestamp: Date.now(), repos: map }));
+    localStorage.setItem("repos", JSON.stringify({ timestamp: Date.now(), repos: map }));
     return map;
 }
