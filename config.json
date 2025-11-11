@@ -42,6 +42,7 @@
         "Tool",
         "Lyth",
         "Sol Mail",
+        "Plasma Wolf",
         "Web",
         "Misc",
         "Project",
@@ -50,7 +51,8 @@
     ],
     "alias": {
         "sol": "Sol Mail",
-        "fc": "Fusion Chat"
+        "fc": "Fusion Chat",
+        "plasma": "Plasma Wolf"
     },
     "move": {
         "fusion-chat": "Fusion Chat"
