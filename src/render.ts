@@ -44,7 +44,8 @@ export async function showDetails(repo: RepoData) {
 
         checkNpmPackage("wxn0brP", repo.name).then(npm => {
             npmStatus.innerHTML = npm?.exists && npm?.published ?
-                `<span class="status-badge status-yes">Yes</span> - ${npm.name}@${npm.version}` :
+                `<span class="status-badge status-yes">Yes</span> -
+                <a href="https://www.npmjs.com/package/${npm.name}" target="_blank">${npm.name}@${npm.version}</a>` :
                 `<span class="status-badge status-no">No</span>`;
         });
     } catch (error) {
