@@ -1,1 +1,1 @@
-export const files = ["dist", "LICENSE", "index.html", "config.json"];
+export const files = ["dist", "LICENSE", "index.html", "style.css", "config.json"];

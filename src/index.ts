@@ -1,5 +1,6 @@
+import { clearCache } from "./api";
 import { all } from "./data";
-import { renderProjects } from "./render";
+import { renderProjects, showDetails } from "./render";
 import { Data, RepoData } from "./types";
 
 declare const Fuse: any;
@@ -34,3 +35,22 @@ searchInput.addEventListener("input", () => {
 
     renderProjects(filteredData);
 });
+
+document.querySelector<HTMLButtonElement>("#clear-cache").addEventListener("click", (e) => {
+    const conf = e.ctrlKey || confirm("Are you sure you want to clear the cache?");
+    if (!conf) return;
+    clearCache();
+});
+
+const urlParam = new URLSearchParams(window.location.search);
+const query = urlParam.get("q");
+if (query) {
+    searchInput.value = query;
+    searchInput.dispatchEvent(new Event("input"));
+}
+
+const details = urlParam.get("d");
+if (details) {
+    const repo = allRepos.find(repo => repo.name === details);
+    if (repo) showDetails(repo);
+}

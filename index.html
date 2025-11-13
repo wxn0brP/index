@@ -4,64 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
     <title>My Project catalog</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: #131313;
-            color: #fff;
-            font-size: 1.1rem;
-        }
-
-        main {
-            width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        a {
-            color: #fff;
-        }
-
-        ul {
-            padding-left: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        li:hover a,
-        li:hover {
-            color: #b811b8;
-        }
-
-        header {
-            text-align: center;
-            position: sticky;
-            top: 3px;
-        }
-
-        #search-input {
-            width: 100%;
-            max-width: 600px;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #555;
-            background-color: rgba(51, 51, 51, 0.5);
-            backdrop-filter: blur(10px);
-            color: #fff;
-            font-size: 16px;
-        }
-
-        .lang-icon {
-            height: 1em;
-            vertical-align: middle;
-            margin-right: 0.5em;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
@@ -69,6 +14,30 @@
         <input type="text" id="search-input" placeholder="Search projects...">
     </header>
     <main></main>
+
+    <div id="popup" class="popup" style="display: none;">
+        <div class="popup-content">
+            <div class="popup-header">
+                <h3 id="popup-title">Project Details</h3>
+                <button class="close-btn">&times;</button>
+            </div>
+            <div id="popup-body">
+                <div class="info-item">
+                    <span class="info-label">GitHub Pages:</span>
+                    <span id="gh-pages-status" class="info-value"></span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">NPM Package:</span>
+                    <span id="npm-status" class="info-value"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <button id="clear-cache">Clear Cache</button>
+    </nav>
+
     <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
     <script src="dist/index.js" type="module"></script>
 </body>
