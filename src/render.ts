@@ -37,13 +37,13 @@ export async function showDetails(repo: RepoData) {
     popup.style.display = "flex";
     try {
         checkGitHubPages("wxn0brP", repo.name).then(ghPages => {
-            ghPagesStatus.innerHTML = ghPages.enabled ?
+            ghPagesStatus.innerHTML = ghPages?.enabled ?
                 `<span class="status-badge status-yes">Yes</span> - <a href="${ghPages.url}" target="_blank">${ghPages.url}</a>` :
                 `<span class="status-badge status-no">No</span>`;
         });
 
         checkNpmPackage("wxn0brP", repo.name).then(npm => {
-            npmStatus.innerHTML = npm.exists && npm.published ?
+            npmStatus.innerHTML = npm?.exists && npm?.published ?
                 `<span class="status-badge status-yes">Yes</span> - ${npm.name}@${npm.version}` :
                 `<span class="status-badge status-no">No</span>`;
         });

@@ -103,13 +103,13 @@ async function _checkGitHubPages(username: string, repoName: string) {
         };
     } catch (error) {
         console.error(`Error checking GitHub Pages for ${username}/${repoName}:`, error);
-        return {
-            enabled: false,
-            status: "error",
-            url: null,
-            source: null
-        };
     }
+    return {
+        enabled: false,
+        status: "error",
+        url: null,
+        source: null
+    };
 }
 
 export async function checkNpmPackage(username: string, repoName: string) {
@@ -206,11 +206,11 @@ async function _checkNpmPackage(username: string, repoName: string) {
         }
     } catch (error) {
         console.error(`Error checking npm package for ${username}/${repoName}:`, error);
-        return {
-            exists: false,
-            name: null,
-            version: null,
-            published: false
-        };
     }
+    return {
+        exists: false,
+        name: null,
+        version: null,
+        published: false
+    };
 }
