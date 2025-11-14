@@ -107,7 +107,7 @@ function init() {
         links.push(createLink(
             "NPM Package",
             `https://www.npmjs.com/package/${pkgName}`,
-            `<i class="devicon-npm-original"></i>`
+            `<i class="devicon-npm-original-wordmark"></i>`
         ));
     }
 
