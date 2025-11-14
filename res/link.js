@@ -1,11 +1,12 @@
 
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
-    let r = params.get("r") || params.get("nr");
-    let n = params.get("n") || params.get("nr");
-    const l = params.get("l");
-
-    return { r, n, l };
+    return {
+        r: params.get("r") || params.get("nr"),
+        n: params.get("n") || params.get("nr"),
+        l: params.get("l"),
+        d: params.has("d"),
+    };
 }
 
 function parseCustomLinks(linksJson) {
@@ -62,7 +63,7 @@ function createLink(text, url, icon) {
 }
 
 function init() {
-    const { r, n, l } = getQueryParams();
+    const { r, n, l, d } = getQueryParams();
     const linksContainer = document.getElementById("links-container");
 
     // Check if at least one parameter is provided
@@ -78,7 +79,7 @@ function init() {
         document.getElementById("subtitle").innerHTML = `Repository: <span class="repo-name">${r}</span>`;
 
         links.push(createLink(
-            "GitHub Pages",
+            d ? "Docs" : "GitHub Pages",
             `https://wxn0brp.github.io/${r}/`,
             `<i class="devicon-github-original"></i>`
         ));
