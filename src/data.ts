@@ -2,7 +2,7 @@ import { fetchRepos } from "./api";
 import { categorizeOthers, groupReposByPrefix } from "./category";
 import { Config, Data, RepoData } from "./types";
 
-const config = await fetch("config.json").then(r => r.json()) as Config;
+const config = await fetch("res/config.json").then(r => r.json()) as Config;
 const repos = await fetchRepos("wxn0brP");
 const allCategories = groupReposByPrefix(repos);
 const categories = categorizeOthers(allCategories.get("others")!, config.prefixRules);
