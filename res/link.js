@@ -1,8 +1,8 @@
 
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
-    const r = params.get("r");
-    const n = params.get("n");
+    let r = params.get("r") || params.get("nr");
+    let n = params.get("n") || params.get("nr");
     const l = params.get("l");
 
     return { r, n, l };
