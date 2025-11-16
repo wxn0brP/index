@@ -102,6 +102,8 @@ function init() {
         }
     }
 
+    if (n && n.startsWith("ValtheraDB")) n = n.replace("ValtheraDB", "db");
+
     // NPM package link (requires "n")
     if (n) {
         const pkgName = `@wxn0brp/${n}`;
