@@ -107,7 +107,7 @@ function init() {
         const pkgName = `@wxn0brp/${n}`;
         links.push(createLink(
             "NPM Package",
-            `https://www.npmjs.com/package/${pkgName}`,
+            `https://www.npmjs.com/package/${pkgName.toLocaleLowerCase()}`,
             `<i class="devicon-npm-original-wordmark"></i>`
         ));
     }
