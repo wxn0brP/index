@@ -63,7 +63,7 @@ function createLink(text, url, icon) {
 }
 
 function init() {
-    const { r, n, l, d } = getQueryParams();
+    let { r, n, l, d } = getQueryParams();
     const linksContainer = document.getElementById("links-container");
 
     // Check if at least one parameter is provided
