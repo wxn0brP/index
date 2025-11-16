@@ -1,0 +1,60 @@
+{
+    "prefixRules": {
+        "Library": [
+            "lib",
+            "library",
+            "libs"
+        ],
+        "Tool": [
+            "tool",
+            "tools"
+        ],
+        "Project": [
+            "project",
+            "projects"
+        ],
+        "Web": [
+            "web",
+            "website",
+            "page",
+            "site",
+            "websites"
+        ],
+        "Misc": [
+            "misc"
+        ],
+        "Game": [
+            "game",
+            "games"
+        ],
+        "App": [
+            "app",
+            "apps"
+        ]
+    },
+    "order": [
+        "ValtheraDB",
+        "VQL",
+        "Zhiva",
+        "App",
+        "FalconFrame",
+        "Library",
+        "Tool",
+        "Lyth",
+        "Sol Mail",
+        "Plasma Wolf",
+        "Web",
+        "Misc",
+        "Project",
+        "Fusion Chat",
+        "Game"
+    ],
+    "alias": {
+        "sol": "Sol Mail",
+        "fc": "Fusion Chat",
+        "plasma": "Plasma Wolf"
+    },
+    "move": {
+        "fusion-chat": "Fusion Chat"
+    }
+}

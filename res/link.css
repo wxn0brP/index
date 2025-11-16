@@ -1,0 +1,137 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #e4e4e7;
+}
+
+.container {
+    max-width: 680px;
+    width: 100%;
+}
+
+.card {
+    background: rgba(30, 30, 46, 0.95);
+    border-radius: 24px;
+    padding: 48px 32px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.avatar {
+    width: 96px;
+    height: 96px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+}
+
+h1 {
+    font-size: 28px;
+    color: #f4f4f5;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: #a1a1aa;
+    font-size: 16px;
+}
+
+.links {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.link-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px 24px;
+    background: rgba(39, 39, 51, 0.8);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    text-decoration: none;
+    color: #e4e4e7;
+    font-weight: 600;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.link-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    border-color: #667eea;
+    background: rgba(102, 126, 234, 0.1);
+}
+
+.link-button svg {
+    margin-right: 12px;
+    width: 24px;
+    height: 24px;
+}
+
+.link-button i {
+    font-size: 24px;
+    margin-right: 12px;
+    margin-top: -3px;
+}
+
+.error {
+    background: rgba(239, 68, 68, 0.1);
+    border: 2px solid rgba(239, 68, 68, 0.5);
+    color: #fca5a5;
+    padding: 16px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.repo-name {
+    font-family: "Courier New", monospace;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    color: #a78bfa;
+}
+
+@media (max-width: 640px) {
+    .card {
+        padding: 32px 24px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .link-button {
+        padding: 16px 20px;
+        font-size: 15px;
+    }
+}
