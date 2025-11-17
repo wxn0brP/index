@@ -69,7 +69,7 @@ export function renderProjects(data: Data[]) {
                     <div class="project-info">
                         <div class="lang-icon">${icon}</div>
                         <div class="project-details">
-                            <a href="${repo.html_url}">${repo.name}</a>
+                            <a href="${repo.html_url}" target="_blank">${repo.name}</a>
                             <div class="project-description">${repo.description || ``}</div>
                         </div>
                     </div>
