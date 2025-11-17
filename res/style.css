@@ -11,7 +11,8 @@ body {
 }
 
 main {
-    width: 1000px;
+    width: 90%;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -210,4 +211,48 @@ nav button {
 
 nav button:hover {
     background-color: #444;
+}
+
+@media (max-width: 768px) {
+    body {
+        font-size: 1rem;
+    }
+
+    main {
+        padding: 10px;
+    }
+
+    li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .project-info {
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .details-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .popup-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .popup-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .close-btn {
+        margin-top: 10px;
+        align-self: flex-end;
+    }
+
+    #search-input {
+        font-size: 14px;
+    }
 }
