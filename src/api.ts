@@ -124,85 +124,31 @@ export async function checkNpmPackage(username: string, repoName: string) {
 
 async function _checkNpmPackage(username: string, repoName: string) {
     try {
-        const packageJsonUrl = `https://raw.githubusercontent.com/${username}/${repoName}/main/package.json`;
+        const packageJsonUrl = `https://raw.githubusercontent.com/${username}/${repoName}/HEAD/package.json`;
         const response = await fetch(packageJsonUrl);
 
-        if (!response.ok) {
-            const branches = ["master", "main", "develop"];
-            let packageFound = false;
+        if (response.ok) {
+            const data = await response.json() as { name: string };
+            const name = data.name;
 
-            for (const branch of branches) {
-                const alternativeUrl = `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/package.json`;
-                const altResponse = await fetch(alternativeUrl);
-
-                if (altResponse.ok) {
-                    const packageData = await altResponse.json();
-
-                    if (packageData.name) {
-                        const npmResponse = await fetch(`https://registry.npmjs.org/${packageData.name}`);
-
-                        if (npmResponse.ok) {
-                            const npmData = await npmResponse.json();
-
-                            return {
-                                exists: true,
-                                name: packageData.name,
-                                version: npmData["dist-tags"]?.latest || "unknown",
-                                published: true
-                            };
-                        } else {
-                            return {
-                                exists: true,
-                                name: packageData.name,
-                                version: packageData.version || "unknown",
-                                published: false
-                            };
-                        }
-                    }
-                    packageFound = true;
-                    break;
-                }
-            }
-
-            if (!packageFound) {
-                return {
-                    exists: false,
-                    name: null,
-                    version: null,
-                    published: false
-                };
-            }
-        } else {
-            const packageData = await response.json();
-
-            if (packageData.name) {
-                const npmResponse = await fetch(`https://registry.npmjs.org/${packageData.name}`);
+            if (name && name.startsWith("@wxn0brp/")) {
+                const npmResponse = await fetch(`https://registry.npmjs.org/${name}`);
 
                 if (npmResponse.ok) {
                     const npmData = await npmResponse.json();
 
                     return {
                         exists: true,
-                        name: packageData.name,
+                        name: name,
                         version: npmData["dist-tags"]?.latest || "unknown",
                         published: true
                     };
                 } else {
-                    return {
-                        exists: true,
-                        name: packageData.name,
-                        version: packageData.version || "unknown",
-                        published: false
-                    };
+                    console.error(`Error loading npm data for ${name}:`, npmResponse);
                 }
-            } else {
-                return {
-                    exists: true,
-                    name: null,
-                    version: packageData.version || "unknown",
-                    published: false
-                };
             }
+        } else {
+            console.error(`Error loading package.json for ${username}/${repoName}:`, response);
         }
     } catch (error) {
         console.error(`Error checking npm package for ${username}/${repoName}:`, error);
