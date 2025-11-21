@@ -1,0 +1,41 @@
+name: Update Sitemap
+
+on:
+  schedule:
+    - cron: "0 4 * * 1" # Every Monday 04:00 UTC
+
+  workflow_run:
+    workflows: ["Build"]
+    types: [completed]
+
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install
+
+      - name: Generate sitemap
+        run: bun src/sitemap.xml
+
+      - name: Prepare public directory
+        run: |
+          mkdir -p public
+          mv sitemap.xml public
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          destination_dir: .
+          keep_files: true
