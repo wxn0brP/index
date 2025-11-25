@@ -1,4 +1,3 @@
-
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
     return {
@@ -6,6 +5,7 @@ function getQueryParams() {
         n: params.get("n") || params.get("nr"),
         l: params.get("l"),
         d: params.has("d"),
+        ld: params.has("ld"),
     };
 }
 
@@ -63,7 +63,7 @@ function createLink(text, url, icon) {
 }
 
 function init() {
-    let { r, n, l, d } = getQueryParams();
+    let { r, n, l, d, ld } = getQueryParams();
     const linksContainer = document.getElementById("links-container");
 
     // Check if at least one parameter is provided
@@ -85,7 +85,12 @@ function init() {
         ));
 
         // Custom links (only if "r" is provided)
-        const customLinks = parseCustomLinks(l);
+        let customLinks = parseCustomLinks(l);
+        if (ld) {
+            customLinks = customLinks || {};
+            customLinks["demo"] = "/demo";
+        }
+
         if (customLinks) {
             Object.entries(customLinks).forEach(([name, path]) => {
                 const fullUrl = `https://wxn0brp.github.io/${r}${path}`;

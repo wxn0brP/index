@@ -70,6 +70,9 @@ function extractEngineLinks(homepage: string): string[] {
 	if (r) {
 		result.push(`https://wxn0brp.github.io/${r}/`);
 
+		if (params.has("ld"))
+			result.push(`https://wxn0brp.github.io/${r}/demo`);
+
 		const custom = parseCustomLinksValue(l);
 		if (custom) {
 			for (const path of Object.values(custom)) {
