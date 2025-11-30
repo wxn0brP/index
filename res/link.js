@@ -1,10 +1,18 @@
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
+    let dFlag = params.get("d");
+    let nr = params.get("nr") || params.get("n") || null;
+
+    if (params.has("x")) {
+        nr = params.get("x");
+        dFlag = true;
+    }
+
     return {
-        r: params.get("r") || params.get("nr"),
-        n: params.get("n") || params.get("nr"),
+        r: params.get("r") || nr,
+        n: nr,
         l: params.get("l"),
-        d: params.has("d"),
+        d: dFlag,
         ld: params.has("ld"),
     };
 }
