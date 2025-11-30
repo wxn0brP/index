@@ -141,3 +141,18 @@ function init() {
 
 }
 init();
+
+setTimeout(() => {
+    document.body.style.backgroundColor = "";
+    document.documentElement.style.backgroundColor = "";
+}, 100);
+
+function css() {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.type = "text/css";
+    link.href = "https://cdn.jsdelivr.net/gh/devicons/devicon@v2.17.0/devicon.min.css";
+    document.head.appendChild(link);
+}
+
+css();
