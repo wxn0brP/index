@@ -1,6 +1,6 @@
 {
     "scripts": {
-        "build": "bun build src/index.ts --outdir dist --minify --sourcemap"
+        "build": "bun build src/index.ts src/link.ts --outdir dist --minify --sourcemap"
     },
     "devDependencies": {
         "@types/bun": "^1.3.2"

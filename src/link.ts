@@ -1,6 +1,6 @@
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
-    let dFlag = params.get("d");
+    let dFlag: boolean = params.has("d");
     let nr = params.get("nr") || params.get("n") || null;
 
     if (params.has("x")) {
@@ -14,10 +14,11 @@ function getQueryParams() {
         l: params.get("l"),
         d: dFlag,
         ld: params.has("ld"),
+        ng: params.get("ng"),
     };
 }
 
-function parseCustomLinks(linksJson) {
+function parseCustomLinks(linksJson: string | null): Record<string, string> | null {
     if (!linksJson) return null;
     try {
         let parsed = {};
@@ -56,12 +57,12 @@ function parseCustomLinks(linksJson) {
     }
 }
 
-function showError(message) {
+function showError(message: string) {
     const errorContainer = document.getElementById("error-container");
     errorContainer.innerHTML = `<div class="error">${message}</div>`;
 }
 
-function createLink(text, url, icon) {
+function createLink(text: string, url: string, icon: string) {
     return `
         <a href="${url}" class="link-button" target="_blank" rel="noopener noreferrer">
             ${icon}
@@ -71,8 +72,8 @@ function createLink(text, url, icon) {
 }
 
 function init() {
-    let { r, n, l, d, ld } = getQueryParams();
-    const linksContainer = document.getElementById("links-container");
+    let { r, n, l, d, ld, ng } = getQueryParams();
+    const linksContainer = document.querySelector("#links-container");
 
     // Check if at least one parameter is provided
     if (!r && !n) {
@@ -84,13 +85,15 @@ function init() {
 
     // GitHub Pages link (requires "r")
     if (r) {
-        document.getElementById("subtitle").innerHTML = `Repository: <span class="repo-name">${r}</span>`;
+        document.querySelector("#subtitle").innerHTML = `Repository: <span class="repo-name">${r}</span>`;
 
-        links.push(createLink(
-            d ? "Docs" : "GitHub Pages",
-            `https://wxn0brp.github.io/${r}/`,
-            `<i class="devicon-github-original"></i>`
-        ));
+        if (!ng) {
+            links.push(createLink(
+                d ? "Docs" : "GitHub Pages",
+                `https://wxn0brp.github.io/${r}/`,
+                `<i class="devicon-github-original"></i>`
+            ));
+        }
 
         // Custom links (only if "r" is provided)
         let customLinks = parseCustomLinks(l);
