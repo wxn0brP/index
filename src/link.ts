@@ -14,7 +14,7 @@ function getQueryParams() {
         l: params.get("l"),
         d: dFlag,
         ld: params.has("ld"),
-        ng: params.get("ng"),
+        ng: params.has("ng"),
     };
 }
 
