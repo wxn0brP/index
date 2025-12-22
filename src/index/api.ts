@@ -1,4 +1,4 @@
-import { RepoData } from "./types";
+import { RepoData } from "../index/types";
 
 const chachKey = "wxn/project-catalog/cache";
 const ttl = 10 * 60 * 1000;
