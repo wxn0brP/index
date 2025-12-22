@@ -12,6 +12,7 @@ export interface RepoData {
     fork: boolean;
     archived: boolean;
     language: string | null;
+    homepage: string | null;
 }
 
 export interface CategorizedRepos {

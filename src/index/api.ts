@@ -38,125 +38,42 @@ export async function fetchRepos(owner: string): Promise<RepoData[]> {
         fork: r.fork,
         archived: r.archived,
         language: r.language,
+        homepage: r.homepage
     }));
 
     setCache("repos", map);
     return map;
 }
-export async function checkGitHubPages(username: string, repoName: string) {
-    const key = `pages-${repoName}`;
-    const cached = getCache(key);
-    if (cached) return cached;
 
-    const data = await _checkGitHubPages(username, repoName);
-    setCache(key, data);
-    return data;
-}
+const isDirectGhPages = (url: string) => url.startsWith("https://wxn0brp.github.io/");
+const isEngineFormat = (url: string) => /^https:\/\/wxn0brp\.github\.io\/l(\?|$)/.test(url);
+const isNpmLink = (url: string) => url.startsWith("https://www.npmjs.com/");
 
-async function _checkGitHubPages(username: string, repoName: string) {
-    const baseUrl = `https://${username}.github.io/${repoName}`;
-    const possibleUrls = [
-        baseUrl,
-        baseUrl + "/docs"
-    ];
+export function getRepoData(repo: RepoData) {
+    const { homepage } = repo;
+    if (!homepage) return null;
 
-    try {
-        const settingsResponse = await fetch(`https://api.github.com/repos/${username}/${repoName}/pages`, {
-            headers: {
-                "Accept": "application/vnd.github.v3+json"
-            }
-        });
-
-        if (settingsResponse.ok) {
-            const pagesData = await settingsResponse.json();
-            if (pagesData.source) {
-                return {
-                    enabled: true,
-                    status: "enabled",
-                    url: pagesData.html_url || possibleUrls[0],
-                    source: pagesData.source
-                };
-            }
-        }
-
-        for (const url of possibleUrls) {
-            try {
-                const response = await fetch(url, { method: "HEAD" });
-                if (response.ok) {
-                    return {
-                        enabled: true,
-                        status: "accessible",
-                        url: url,
-                        source: "unknown"
-                    };
-                }
-            } catch (error) {
-                continue;
-            }
-        }
+    if (isEngineFormat(homepage)) {
+        const url = new URL(homepage);
+        const params = url.searchParams;
+        const r = params.get("r") || params.get("nr") || params.get("x");
+        const n = params.get("n") || params.get("nr") || params.get("x");
 
         return {
-            enabled: false,
-            status: "disabled",
-            url: null,
-            source: null
-        };
-    } catch (error) {
-        console.error(`Error checking GitHub Pages for ${username}/${repoName}:`, error);
-    }
-    return {
-        enabled: false,
-        status: "error",
-        url: null,
-        source: null
-    };
-}
-
-export async function checkNpmPackage(username: string, repoName: string) {
-    const key = `npm-${repoName}`;
-    const cached = getCache(key);
-    if (cached) return cached;
-
-    const data = await _checkNpmPackage(username, repoName);
-    setCache(key, data);
-    return data;
-}
-
-async function _checkNpmPackage(username: string, repoName: string) {
-    try {
-        const packageJsonUrl = `https://raw.githubusercontent.com/${username}/${repoName}/HEAD/package.json`;
-        const response = await fetch(packageJsonUrl);
-
-        if (response.ok) {
-            const data = await response.json() as { name: string };
-            const name = data.name;
-
-            if (name && name.startsWith("@wxn0brp/")) {
-                const npmResponse = await fetch(`https://registry.npmjs.org/${name}`);
-
-                if (npmResponse.ok) {
-                    const npmData = await npmResponse.json();
-
-                    return {
-                        exists: true,
-                        name: name,
-                        version: npmData["dist-tags"]?.latest || "unknown",
-                        published: true
-                    };
-                } else {
-                    console.error(`Error loading npm data for ${name}:`, npmResponse);
-                }
-            }
-        } else {
-            console.error(`Error loading package.json for ${username}/${repoName}:`, response);
+            gh: !!r,
+            npm: !!n
         }
-    } catch (error) {
-        console.error(`Error checking npm package for ${username}/${repoName}:`, error);
+    } else if (isDirectGhPages(homepage)) {
+        return {
+            gh: true,
+            npm: false
+        }
+    } else if (isNpmLink(homepage)) {
+        return {
+            gh: false,
+            npm: true
+        }
     }
-    return {
-        exists: false,
-        name: null,
-        version: null,
-        published: false
-    };
+
+    return null;
 }

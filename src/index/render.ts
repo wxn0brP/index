@@ -1,5 +1,5 @@
+import { getRepoData } from "./api";
 import { Data, RepoData } from "./types";
-import { checkGitHubPages, checkNpmPackage } from "./api";
 
 const main = document.querySelector<HTMLDivElement>("main")!;
 const popup = document.querySelector<HTMLDivElement>("#popup")!;
@@ -30,28 +30,35 @@ const link = (name: string) => `https://cdn.jsdelivr.net/gh/devicons/devicon/ico
 
 export async function showDetails(repo: RepoData) {
     popupTitle.textContent = `${repo.name} Details`;
-
-    ghPagesStatus.innerHTML = `<span class="info-value">Loading...</span>`;
-    npmStatus.innerHTML = `<span class="info-value">Loading...</span>`;
-
     popup.style.display = "flex";
-    try {
-        checkGitHubPages("wxn0brP", repo.name).then(ghPages => {
-            ghPagesStatus.innerHTML = ghPages?.enabled ?
-                `<span class="status-badge status-yes">Yes</span> - <a href="${ghPages.url}" target="_blank">${ghPages.url}</a>` :
-                `<span class="status-badge status-no">No</span>`;
-        });
 
-        checkNpmPackage("wxn0brP", repo.name).then(npm => {
-            npmStatus.innerHTML = npm?.exists && npm?.published ?
-                `<span class="status-badge status-yes">Yes</span> -
-                <a href="https://www.npmjs.com/package/${npm.name}" target="_blank">${npm.name}@${npm.version}</a>` :
-                `<span class="status-badge status-no">No</span>`;
-        });
-    } catch (error) {
-        console.error(`Error loading details for ${repo.name}:`, error);
-        ghPagesStatus.innerHTML = `<span class="status-badge status-no">Error loading data</span>`;
-        npmStatus.innerHTML = `<span class="status-badge status-no">Error loading data</span>`;
+    const repoData = getRepoData(repo);
+
+    if (!repoData) {
+        ghPagesStatus.innerHTML = `<span class="status-badge status-no">No</span>`;
+        npmStatus.innerHTML = `<span class="status-badge status-no">No</span>`;
+        return;
+    }
+
+    const ghUrl = repoData.gh && `https://github.com/wxn0brP/${repo.name}`;
+    ghPagesStatus.innerHTML = ghUrl ?
+        `<span class="status-badge status-yes">Yes</span> -<a href="${ghUrl}" target="_blank">${ghUrl}</a>` :
+        `<span class="status-badge status-no">No</span>`;
+
+    if (repoData.npm) {
+        let n = repo.name;
+        if (n && n.startsWith("ValtheraDB")) n = n.replace("ValtheraDB", "db");
+        if (n.match(/[A-Z]/))
+            n = n[0] + n.slice(1).replace(/([A-Z])/g, "-$1");
+
+        n = "@wxn0brp/" + n.toLowerCase();
+
+        npmStatus.innerHTML = `
+        <span class="status-badge status-yes">Yes</span> -
+        <a href="https://www.npmjs.com/package/${n}" target="_blank">${n}</a>
+        `;
+    } else {
+        npmStatus.innerHTML = `<span class="status-badge status-no">No</span>`;
     }
 }
 
