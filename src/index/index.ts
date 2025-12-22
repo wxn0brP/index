@@ -1,6 +1,6 @@
 import { clearCache } from "./api";
 import { all } from "./data";
-import { renderProjects, showDetails } from "./render";
+import { renderProjects } from "./render";
 import { Data, RepoData } from "./types";
 
 declare const Fuse: any;
@@ -47,10 +47,4 @@ const query = urlParam.get("q");
 if (query) {
     searchInput.value = query;
     searchInput.dispatchEvent(new Event("input"));
-}
-
-const details = urlParam.get("d");
-if (details) {
-    const repo = allRepos.find(repo => repo.name === details);
-    if (repo) showDetails(repo);
 }
