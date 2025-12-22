@@ -24,9 +24,10 @@ for (const alias of Object.entries(config.alias)) {
 }
 
 if (config.move) {
-    for (const [projectName, newCategory] of Object.entries(config.move)) {
+    for (const [projectName, newCategoryData] of Object.entries(config.move)) {
         let repoToMove: RepoData | undefined;
         let oldCategory: string | undefined;
+        const [newCategory, orderString] = newCategoryData.split(".");
 
         for (const [category, repos] of allMap.entries()) {
             const repoIndex = repos.findIndex(repo => repo.name === projectName);
@@ -44,7 +45,10 @@ if (config.move) {
         if (repoToMove) {
             if (!allMap.has(newCategory))
                 allMap.set(newCategory, []);
-            allMap.get(newCategory)!.unshift(repoToMove);
+            const category = allMap.get(newCategory)!;
+            let order = +orderString;
+            if (order < 0) order += category.length + 1;
+            category.splice(order, 0, repoToMove);
         }
     }
 }

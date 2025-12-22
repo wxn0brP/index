@@ -43,6 +43,7 @@
         "Lyth",
         "Sol Mail",
         "Plasma Wolf",
+        "Violet Libra",
         "Web",
         "Misc",
         "Project",
@@ -52,9 +53,11 @@
     "alias": {
         "sol": "Sol Mail",
         "fc": "Fusion Chat",
-        "plasma": "Plasma Wolf"
+        "plasma": "Plasma Wolf",
+        "violet": "Violet Libra"
     },
     "move": {
-        "fusion-chat": "Fusion Chat"
+        "fusion-chat": "Fusion Chat.0",
+        "zhiva-assets": "Zhiva.-1"
     }
 }
