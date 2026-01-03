@@ -35,6 +35,7 @@ jobs:
         run: |
           mkdir -p public
           mv sitemap.xml public
+          mv sitemap-wxn0.xml public
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v4
