@@ -5,4 +5,4 @@ node_modules
 yarn.lock
 bun.lock
 package-lock.json
-sitemap.xml
+sitemap*.xml
