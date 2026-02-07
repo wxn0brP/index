@@ -3,6 +3,16 @@ name: Deploy 404.html to GitHub Pages
 on:
   workflow_dispatch:
 
+  workflow_run:
+    workflows:
+      - Build
+    types:
+      - completed
+
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
