@@ -1,3 +1,4 @@
+import { fetchRepoPages } from "#api.utils";
 import { RepoData } from "../index/types";
 
 const chachKey = "wxn/project-catalog/cache";
@@ -30,7 +31,8 @@ export async function fetchRepos(owner: string): Promise<RepoData[]> {
     const cached = getCache("repos");
     if (cached) return cached;
 
-    const repos = await fetch(`https://api.github.com/users/${owner}/repos?per_page=100`).then((r) => r.json()) as RepoData[];
+    const repos: RepoData[] = await fetchRepoPages(owner);
+
     const map = repos.map((r) => ({
         name: r.name,
         html_url: r.html_url,

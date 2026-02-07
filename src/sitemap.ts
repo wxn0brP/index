@@ -1,5 +1,6 @@
 #!/usr/bin/env bun
 
+import { fetchRepoPages } from "#api.utils";
 import { writeFile } from "fs/promises";
 
 interface Repo {
@@ -109,9 +110,7 @@ function convertToWxn0(url: string): string {
 
 // Main
 async function main() {
-	const reposRaw = await fetch(
-		"https://api.github.com/users/wxn0brP/repos?per_page=100"
-	).then(r => r.json());
+	const reposRaw = await fetchRepoPages("wxn0brP");
 
 	const repos: Repo[] = reposRaw.map((repo: any) => ({
 		name: repo.name,
