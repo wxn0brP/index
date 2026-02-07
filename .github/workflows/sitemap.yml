@@ -5,7 +5,8 @@ on:
     - cron: "0 4 * * 1" # Every Monday 04:00 UTC
 
   workflow_run:
-    workflows: ["Build"]
+    workflows:
+      - Build
     types:
       - completed
 
