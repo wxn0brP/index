@@ -124,7 +124,7 @@ function init() {
 
     if (n && n.startsWith("ValtheraDB")) n = n.replace("ValtheraDB", "db");
     if (n === r && n.match(/[A-Z]/))
-        n = n[0] + n.slice(1).replace(/([A-Z])/g, "-$1");
+        n = n.replace(/(?<=[a-z])([A-Z])/g, "-$1");
 
     // NPM package link (requires "n")
     if (n) {
