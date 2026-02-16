@@ -22,9 +22,15 @@ function parseCustomLinks(linksJson: string | null): Record<string, string> | nu
     if (!linksJson) return null;
     try {
         let parsed = {};
-        // Handle string format: "demo, docs"
+        // Handle semicolon format: 
+        // - demo: /custom/path, docs: /docs
+        // - demo, docs
         if (!linksJson.includes("{") && !linksJson.includes("[")) {
-            parsed = linksJson.split(",");
+            const split = linksJson.split(",");
+            if (linksJson.includes(":"))
+                parsed = Object.fromEntries(split.map(item => item.split(":")));
+            else
+                parsed = split;
         } else {
             parsed = JSON.parse(linksJson);
         }
@@ -41,11 +47,9 @@ function parseCustomLinks(linksJson: string | null): Record<string, string> | nu
         // Handle object format: {"demo": "/custom/path"} or {"demo": 1}
         if (typeof parsed === "object" && parsed !== null) {
             const result = {};
-            Object.entries(parsed).forEach(([name, value]) => {
-                // If value is truthy (1, true, "any string"), use default path
-                if (value === true || value === 1 || (typeof value === "string" && value.startsWith("/"))) {
-                    result[name] = typeof value === "string" && value.startsWith("/") ? value : `/${name}`;
-                }
+            Object.entries(parsed).forEach(([key, value]) => {
+                if (typeof value === "string") result[key] = value.startsWith("/") ? value : `/${value}`;
+                else result[key] = `/${key}`;
             });
             return result;
         }
