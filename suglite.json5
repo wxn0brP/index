@@ -3,9 +3,5 @@
     watch: [
         "src",
     ],
-    server: 8075,
-    restart_cmd: "clear",
-    events: {
-        clean: "rm -rf dist",
-    },
+    server: 8075
 }
