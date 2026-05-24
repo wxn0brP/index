@@ -45,8 +45,8 @@
         "Plasma Wolf",
         "Violet Libra",
         "Web",
+        "Gate Warden",
         "Misc",
-        "Project",
         "Fusion Chat",
         "Game"
     ],
@@ -54,10 +54,15 @@
         "sol": "Sol Mail",
         "fc": "Fusion Chat",
         "plasma": "Plasma Wolf",
+        "gate": "Gate Warden",
         "violet": "Violet Libra"
     },
     "move": {
         "fusion-chat": "Fusion Chat.0",
-        "zhiva-assets": "Zhiva.-1"
+        "zhiva-assets": "Zhiva.-1",
+        "snake_cli": "Game.1",
+        "snake_cli_c": "Game.1",
+        "index": "Web.1",
+        "Project_Ares": "App.1"
     }
 }
