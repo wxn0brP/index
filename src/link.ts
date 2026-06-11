@@ -4,7 +4,7 @@ const specialMap = {
 }
 
 function getQueryParams() {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.hash.slice(1) || window.location.search);
     let dFlag: boolean = params.has("d");
     let nr = params.get("nr") || params.get("n") || null;
 
