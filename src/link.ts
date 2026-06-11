@@ -1,3 +1,8 @@
+const specialMap = {
+    "": "ValtheraDB",
+    core: "ValtheraDB-core",
+}
+
 function getQueryParams() {
     const params = new URLSearchParams(window.location.search);
     let dFlag: boolean = params.has("d");
@@ -5,6 +10,12 @@ function getQueryParams() {
 
     if (params.has("x")) {
         nr = params.get("x");
+        dFlag = true;
+    }
+
+    if (params.has("v")) {
+        const v = params.get("v");
+        nr = specialMap[v] || "ValtheraDB-storage-" + v;
         dFlag = true;
     }
 
