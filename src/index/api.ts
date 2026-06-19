@@ -1,5 +1,6 @@
 import { fetchRepoPages } from "#api.utils";
 import { RepoData } from "../index/types";
+import { isLinkPageUrl, parseLinkPage } from "../link-parser";
 
 const chachKey = "wxn/project-catalog/cache";
 const ttl = 10 * 60 * 1000;
@@ -40,7 +41,9 @@ export async function fetchRepos(owner: string): Promise<RepoData[]> {
         fork: r.fork,
         archived: r.archived,
         language: r.language,
-        homepage: r.homepage
+        homepage: r.homepage,
+        created_at: r.created_at,
+        topics: r.topics || []
     }));
 
     setCache("repos", map);
@@ -48,32 +51,39 @@ export async function fetchRepos(owner: string): Promise<RepoData[]> {
 }
 
 const isDirectGhPages = (url: string) => url.startsWith("https://wxn0brp.github.io/");
-const isEngineFormat = (url: string) => /^https:\/\/wxn0brp\.github\.io\/l(\?|$)/.test(url);
 const isNpmLink = (url: string) => url.startsWith("https://www.npmjs.com/");
 
 export function getRepoData(repo: RepoData) {
     const { homepage } = repo;
     if (!homepage) return null;
 
-    if (isEngineFormat(homepage)) {
-        const url = new URL(homepage);
-        const params = url.searchParams;
-        const r = params.get("r") || params.get("nr") || params.get("x");
-        const n = params.get("n") || params.get("nr") || params.get("x");
+    if (isLinkPageUrl(homepage)) {
+        const parsed = parseLinkPage(homepage, false);
 
         return {
-            gh: !!r,
-            npm: !!n
+            gh: parsed.links.some(link => link.type === "pages"),
+            npm: parsed.links.some(link => link.type === "npm"),
+            links: parsed.links,
         }
     } else if (isDirectGhPages(homepage)) {
         return {
             gh: true,
-            npm: false
+            npm: false,
+            links: [{
+                type: "pages" as const,
+                label: "GitHub Pages",
+                url: homepage,
+            }],
         }
     } else if (isNpmLink(homepage)) {
         return {
             gh: false,
-            npm: true
+            npm: true,
+            links: [{
+                type: "npm" as const,
+                label: "NPM",
+                url: homepage,
+            }],
         }
     }
 

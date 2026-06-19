@@ -26,14 +26,12 @@ for (const alias of Object.entries(config.alias)) {
 if (config.move) {
     for (const [projectName, newCategoryData] of Object.entries(config.move)) {
         let repoToMove: RepoData | undefined;
-        let oldCategory: string | undefined;
         const [newCategory, orderString] = newCategoryData.split(".");
 
         for (const [category, repos] of allMap.entries()) {
             const repoIndex = repos.findIndex(repo => repo.name === projectName);
             if (repoIndex !== -1) {
                 repoToMove = repos[repoIndex];
-                oldCategory = category;
                 repos.splice(repoIndex, 1);
                 if (repos.length === 0) {
                     allMap.delete(category);
@@ -61,3 +59,7 @@ for (const category of config.order) {
     }
 }
 all.push(...allMap.entries());
+
+export const pinned = (config.pinned || [])
+    .map(name => repos.find(repo => repo.name === name))
+    .filter(Boolean) as RepoData[];

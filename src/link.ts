@@ -1,73 +1,11 @@
-const specialMap = {
-    "": "ValtheraDB",
-    core: "ValtheraDB-core",
-}
+import { Config } from "./index/types";
+import { parseLinkPage } from "./link-parser";
 
-function getQueryParams() {
-    const params = new URLSearchParams(window.location.hash.slice(1) || window.location.search);
-    let dFlag: boolean = params.has("d");
-    let nr = params.get("nr") || params.get("n") || null;
-
-    if (params.has("x")) {
-        nr = params.get("x");
-        dFlag = true;
-    }
-
-    if (params.has("v")) {
-        const v = params.get("v");
-        nr = specialMap[v] || "ValtheraDB-storage-" + v;
-        dFlag = true;
-    }
-
-    return {
-        r: params.get("r") || nr,
-        n: nr,
-        l: params.get("l"),
-        d: dFlag,
-        ld: params.has("ld"),
-        ng: params.has("ng"),
-    };
-}
-
-function parseCustomLinks(linksJson: string | null): Record<string, string> | null {
-    if (!linksJson) return null;
+async function getConfig(): Promise<Config | null> {
     try {
-        let parsed = {};
-        // Handle semicolon format: 
-        // - demo: /custom/path, docs: /docs
-        // - demo, docs
-        if (!linksJson.includes("{") && !linksJson.includes("[")) {
-            const split = linksJson.split(",");
-            if (linksJson.includes(":"))
-                parsed = Object.fromEntries(split.map(item => item.split(":")));
-            else
-                parsed = split;
-        } else {
-            parsed = JSON.parse(linksJson);
-        }
-
-        // Handle array format: ["demo", "docs"]
-        if (Array.isArray(parsed)) {
-            const result = {};
-            parsed.forEach(name => {
-                result[name] = `/${name}`;
-            });
-            return result;
-        }
-
-        // Handle object format: {"demo": "/custom/path"} or {"demo": 1}
-        if (typeof parsed === "object" && parsed !== null) {
-            const result = {};
-            Object.entries(parsed).forEach(([key, value]) => {
-                if (typeof value === "string") result[key] = value.startsWith("/") ? value : `/${value}`;
-                else result[key] = `/${key}`;
-            });
-            return result;
-        }
-
-        return null;
-    } catch (e) {
-        console.error("Error parsing custom links:", e);
+        return await fetch("res/config.json").then(r => r.json()) as Config;
+    } catch (error) {
+        console.error("Error loading config:", error);
         return null;
     }
 }
@@ -77,83 +15,86 @@ function showError(message: string) {
     errorContainer.innerHTML = `<div class="error">${message}</div>`;
 }
 
+function escapeHtml(value: string) {
+    const div = document.createElement("div");
+    div.textContent = value;
+    return div.innerHTML;
+}
+
+function titleCase(value: string) {
+    return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+function resolveProjectUrl(repo: string, path: string) {
+    if (/^https?:\/\//.test(path)) return path;
+    return `https://wxn0brp.github.io/${repo}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
 function createLink(text: string, url: string, icon: string) {
     return `
         <a href="${url}" class="link-button" target="_blank" rel="noopener noreferrer">
             ${icon}
-            <span>${text}</span>
+            <span>${escapeHtml(text)}</span>
         </a>
     `;
 }
 
-function init() {
-    let { r, n, l, d, ld, ng } = getQueryParams();
+async function init() {
     const linksContainer = document.querySelector("#links-container");
+    const config = await getConfig();
+    const parsed = parseLinkPage(new URLSearchParams(window.location.hash.slice(1) || window.location.search));
+    const { r, n } = parsed;
 
     // Check if at least one parameter is provided
     if (!r && !n) {
-        showError("❌ Error: You must provide at least one parameter (r or n)");
+        showError("Error: provide at least one parameter: r, n, nr, x, or v.");
         return;
     }
 
     const links = [];
 
-    // GitHub Pages link (requires "r")
     if (r) {
         document.querySelector("#subtitle").innerHTML = `Repository: <span class="repo-name">${r}</span>`;
 
-        if (!ng) {
+        const configuredLinks = config?.projects?.[r]?.links || {};
+        Object.entries(configuredLinks).forEach(([name, path]) => {
             links.push(createLink(
-                d ? "Docs" : "GitHub Pages",
-                `https://wxn0brp.github.io/${r}/`,
+                titleCase(name),
+                resolveProjectUrl(r, path),
+                `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656
+                    5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>`
+            ));
+        });
+    }
+
+    for (const link of parsed.links) {
+        if (link.type === "pages" || link.type === "repo") {
+            links.push(createLink(
+                link.label,
+                link.url,
                 `<i class="devicon-github-original"></i>`
             ));
-        }
-
-        // Custom links (only if "r" is provided)
-        let customLinks = parseCustomLinks(l);
-        if (ld) {
-            customLinks = customLinks || {};
-            customLinks["demo"] = "/demo";
-        }
-
-        if (customLinks) {
-            Object.entries(customLinks).forEach(([name, path]) => {
-                const fullUrl = `https://wxn0brp.github.io/${r}${path}`;
-                links.push(createLink(
-                    name.charAt(0).toUpperCase() + name.slice(1),
-                    fullUrl,
-                    `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-                        d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656
-                        5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
-                    </svg>`
-                ));
-            });
+        } else if (link.type === "npm") {
+            links.push(createLink(
+                link.label,
+                link.url,
+                `<i class="devicon-npm-original-wordmark"></i>`
+            ));
+        } else {
+            links.push(createLink(
+                link.label,
+                link.url,
+                `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656
+                    5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/>
+                </svg>`
+            ));
         }
     }
-
-    if (n && n.startsWith("ValtheraDB")) n = n.replace("ValtheraDB", "db");
-    if (n === r && n.match(/[A-Z]/))
-        n = n.replace(/(?<=[a-z])([A-Z])/g, "-$1");
-
-    // NPM package link (requires "n")
-    if (n) {
-        const pkgName = `@wxn0brp/${n}`;
-        links.push(createLink(
-            "NPM Package",
-            `https://www.npmjs.com/package/${pkgName.toLocaleLowerCase()}`,
-            `<i class="devicon-npm-original-wordmark"></i>`
-        ));
-    }
-
-    // GitHub Repository link (always)
-    const repoName = r || n;
-    links.push(createLink(
-        "GitHub Repository",
-        `https://github.com/wxn0brP/${repoName}`,
-        `<i class="devicon-github-original"></i>`
-    ));
 
     linksContainer.innerHTML = links.join("");
 

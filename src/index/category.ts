@@ -1,4 +1,4 @@
-import { RepoData, CategorizedRepos } from "./types";
+import { CategorizedRepos, RepoData } from "./types";
 import { getPrefix } from "./utils";
 
 export function groupReposByPrefix(repos: RepoData[]): Map<string, RepoData[]> {
