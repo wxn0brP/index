@@ -1,9 +1,13 @@
 import { normalizeNpmPackageName } from "./index/npm";
 
-const specialMap: Record<string, string> = {
-    "": "ValtheraDB",
-    core: "ValtheraDB-core",
-};
+const ValtheraDBSpecial = [
+    "",
+    "core",
+    "client",
+    "resolver",
+    "crdt",
+    "lock",
+];
 
 export type ParsedLinkType = "pages" | "npm" | "repo" | "custom";
 
@@ -95,7 +99,12 @@ export function parseLinkPage(urlOrParams: string | URLSearchParams, includeRepo
 
     if (params.has("v")) {
         const v = params.get("v") || "";
-        nr = specialMap[v] || "ValtheraDB-storage-" + v;
+        nr =
+            ValtheraDBSpecial.includes(v) ?
+                v === "" ?
+                    "ValtheraDB" :
+                    "ValtheraDB-" + v :
+                "ValtheraDB-storage-" + v;
         d = true;
     }
 
