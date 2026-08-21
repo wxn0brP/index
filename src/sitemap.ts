@@ -10,14 +10,19 @@ interface Repo {
 }
 
 // Parses "l" parameter
-function parseCustomLinksValue(value: string | null): Record<string, string> | null {
+function parseCustomLinksValue(
+	value: string | null,
+): Record<string, string> | null {
 	if (!value) return null;
 
 	try {
 		let parsed: any;
 
 		if (!value.includes("{") && !value.includes("[")) {
-			const arr = value.split(",").map(v => v.trim()).filter(Boolean);
+			const arr = value
+				.split(",")
+				.map(v => v.trim())
+				.filter(Boolean);
 			const out: Record<string, string> = {};
 			for (const name of arr) {
 				out[name] = `/${name}`;
@@ -93,7 +98,7 @@ function generateSitemap(urls: string[]): string {
 		<loc>${url}</loc>
 		<priority>0.8</priority>
 		<changefreq>weekly</changefreq>
-	</url>`
+	</url>`,
 		)
 		.join("");
 
@@ -115,7 +120,7 @@ async function main() {
 	const repos: Repo[] = reposRaw.map((repo: any) => ({
 		name: repo.name,
 		html_url: repo.html_url,
-		homepage: repo.homepage
+		homepage: repo.homepage,
 	}));
 
 	const sitemapUrls: string[] = [];

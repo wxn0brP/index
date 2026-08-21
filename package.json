@@ -3,6 +3,7 @@
         "build": "bun build src/index/index.ts src/link.ts --outdir dist --minify --sourcemap"
     },
     "devDependencies": {
-        "@types/bun": "*"
+        "@types/bun": "*",
+        "@wxn0brp/biome": "*"
     }
 }
