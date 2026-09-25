@@ -7,6 +7,7 @@ const ValtheraDBSpecial = [
 	"resolver",
 	"crdt",
 	"lock",
+	"redis-cache",
 ];
 
 export type ParsedLinkType = "pages" | "npm" | "repo" | "custom";
