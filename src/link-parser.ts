@@ -10,7 +10,7 @@ const ValtheraDBSpecial = [
 	"redis-cache",
 ];
 
-export type ParsedLinkType = "pages" | "npm" | "repo" | "custom";
+export type ParsedLinkType = "pages" | "npm" | "jsr" | "repo" | "custom";
 
 export interface ParsedLink {
 	type: ParsedLinkType;
@@ -149,6 +149,14 @@ export function parseLinkPage(
 			label: "NPM Package",
 			url: `https://www.npmjs.com/package/${normalizeNpmPackageName(n)}`,
 		});
+
+		if (params.has("s")) {
+			links.push({
+				type: "jsr",
+				label: "JSR Package",
+				url: `https://jsr.io/${normalizeNpmPackageName(n)}`,
+			});
+		}
 	}
 
 	if (includeRepo) {
