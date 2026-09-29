@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="dark light">
+    <title>wxn0brP Project Catalog</title>
+    <link rel="stylesheet" href="res/style.css">
+</head>
+
+<body>
+    <header>
+        <button id="filters-toggle" class="filter-menu" type="button" aria-expanded="false"
+            aria-controls="filters-panel" aria-label="Toggle filters">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+
+        <section class="filter-box" aria-label="Project filters">
+            <div id="filters-panel" class="filter-list">
+                <label class="filter-search" for="search-input">
+                    <span>Search</span>
+                    <input type="text" id="search-input" placeholder="Name, description, tag...">
+                </label>
+
+                <label>
+                    <span>Lang</span>
+                    <select id="lang-filter">
+                        <option value="">All languages</option>
+                    </select>
+                </label>
+
+                <label>
+                    <span>Tag</span>
+                    <select id="tag-filter">
+                        <option value="">All tags</option>
+                    </select>
+                </label>
+
+                <label>
+                    <span>Status</span>
+                    <select id="status-filter">
+                        <option value="">All statuses</option>
+                    </select>
+                </label>
+
+                <label>
+                    <span>Sort</span>
+                    <select id="sort-select">
+                        <option value="age">Configured order</option>
+                        <option value="name">Name</option>
+                        <option value="lang">Lang</option>
+                    </select>
+                </label>
+
+                <button id="reset-filters" type="button">Reset</button>
+            </div>
+        </section>
+    </header>
+
+    <main>
+        <section id="projects"></section>
+        <p id="empty-state" class="no-results" hidden>No projects match the current filters.</p>
+    </main>
+
+    <nav>
+        <button id="clear-cache">Clear Cache</button>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+    <script src="dist/index/index.js" type="module"></script>
+</body>
+
+</html>
