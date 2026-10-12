@@ -5,9 +5,6 @@ const ValtheraDBSpecial = [
 	"core",
 	"client",
 	"resolver",
-	"crdt",
-	"lock",
-	"redis-cache",
 ];
 
 export type ParsedLinkType = "pages" | "npm" | "jsr" | "repo" | "custom";
@@ -105,7 +102,13 @@ export function parseLinkPage(
 		d = true;
 	}
 
-	if (params.has("v")) {
+	if (params.has("vp")) {
+		nr = `ValtheraDB-plugin-${params.get("vp") ?? ""}`;
+		d = true;
+	} else if (params.has("vs")) {
+		nr = `ValtheraDB-spec-${params.get("vs") ?? ""}`;
+		d = true;
+	} else if (params.has("v")) {
 		const v = params.get("v") || "";
 		nr = ValtheraDBSpecial.includes(v)
 			? v === ""
